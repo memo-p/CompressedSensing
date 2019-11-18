@@ -2,12 +2,12 @@ sudCXX=g++
 
 LIBDIR = -L~/usr/lib  -L/usr/local/lib 
 
-DEBUG=
+DEBUG=-g
 OPTIM=-O2
 # BLASOARMA_MACOS= -lblas -llapack -DARMA_DONT_USE_WRAPPER -framework Accelerate  
 BLASOARMA= -lblas -llapack
 INCLUDE= -I/mnt/d/WorkspaceC++/include/
-CFLAGS= $(DEBUG) $(OPTIM) $(INCLUDE) -std=c++11 -fpermissive -Wall -w $(BLASOARMA)
+CFLAGS= $(OPTIM) $(INCLUDE) -std=c++11 -fpermissive -Wall -w $(BLASOARMA)
 
 LIBS= $(BLASOARMA) -lm -larmadillo -w 
 SRCDIR=./src
@@ -27,6 +27,11 @@ main: $(OBJS) $(OBJDIR)/main.o
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
 	$(CXX) -c -o $@ $< $(CFLAGS)
+
+debug: CFLAGS += -g
+debug: main
+	
+
 
 run: main
 	./Solver

@@ -22,20 +22,20 @@
 #include <cstring>
 #include <vector>
 #include <armadillo>
-#include "SolverAXBWeightedProj.hpp"
-#include "SolverAXBWPLQFixe.hpp"
-#include "SolverAXBWPLQ.hpp"
+#include "Bench.hpp"
 
 using namespace std;
 using namespace arma;
 
  
-int main(int argc, char **argv){
+int main(int argc, char **argv){ 
+    test_projection();
     arma_rng::set_seed(2);         // set the seed
    	int k = 15;                     // numbr of non-zeros component of x
     int n = 100;                    // number of rows
     int m = 256;                    // number of columns (should be greater than n)
     double a = k;                   // radius
+    int nbQ = 4;                    // Number of q values for lq
     mat A = randn<mat>(n,m);        // Matrix A
     vec x0 = zeros<vec>(m);         // true x (with sparsity k) and gaussian values
     for (int i = 0; i < k; ++i){
@@ -47,49 +47,39 @@ int main(int argc, char **argv){
     SolverConfiguration cfg;
     cfg.ls_iter_max = 30;
     cfg.epsilon = 1e-8;
-    cfg.epsilonQ = 1e-8;
-    cfg.min_loss_change = 1e-8;
+    cfg.epsilonQ = 1e-7;
+    cfg.min_loss_change = 1e-5;
     cfg.solve_iter_max = 1000;
     cfg.solve_timeout = 60;
     cfg.step_decrease_factor = 2.;
     cfg.min_reweight_change = 1e-8;
 
-    vec w = ones<vec>(m);
+    
     vec x = randn<vec>(m);
 
-    // Lasso 
-    SolverAXBWeightedProj slvrw(A, b, x, cfg, w, a);
-    slvrw.solve();
-    cout << "LASSO method" << endl;
-    cout << "norm L0 of x " << accu(abs(slvrw.x)>= cfg.epsilon) << endl;
-    cout << "Reconstruction " << slvrw.norms[slvrw.solve_iter-1]  << endl;
-    cout << endl;
-
-    // Direct use of L0 via reweighting
-    SolverAXBWPLQFixe slvrwqf(A, b, slvrw.x, cfg, w, a, 0);
-    slvrwqf.solve();
-    cout << "L0 reweighting method" << endl;
-    cout << "norm L0 of x " << accu(abs(slvrwqf.x)>= cfg.epsilon) << endl;
-    cout << "Reconstruction " << slvrwqf.norms[slvrwqf.solve_iter-1]  << endl;
-    cout << endl;
 
     // Iterative lQ projection
-    int nbQ = 11;
-    SolverAXBWPLQ slvrwq(A, b, x, cfg, a, 11);
-    slvrwq.solve();
-    cout << "Iterative L0 reweighting method" << endl;
-    cout << "norm L0 of x " << accu(abs(slvrwq.x)>= cfg.epsilon) << endl;
-    cout << "Reconstruction " << slvrwq.recNorms[nbQ-1]  << endl;
-    cout << endl;
-
-    // for (size_t i = 0; i < nbQ; i++)
-    // {
-    //     printf("%.2e;%.0f;%.2f;%.0f \n",slvrwq.recNorms[i], slvrwq.normsXL0[i], slvrwq.normsXL1[i], slvrwq.nbIters[i]);
-    // }
     
+    BenchResults * res_lasso = bench_Lasso(A, b, x, cfg, a);
+    BenchResults * res_candes = bench_candes(A, b, x, cfg, a);
+    BenchResults * res_lq3 = bench_LQ(A, b, x, cfg, a, 3);
+    BenchResults * res_lq4 = bench_LQ(A, b, x, cfg, a, 4);
+    BenchResults * res_lq5 = bench_LQ(A, b, x, cfg, a, 5);
+    BenchResults * res_lq6 = bench_LQ(A, b, x, cfg, a, 6);
 
-    
-    test_projection();
+    cout << "Lasso"<<endl;
+    res_lasso->print();
+    cout << "Candes"<<endl;
+    res_candes->print();
+    cout << "LQ3"<<endl;
+    res_lq3->print();
+    cout << "LQ4"<<endl;
+    res_lq4->print();
+    cout << "LQ5"<<endl;
+    res_lq5->print();
+    cout << "LQ6"<<endl;
+    res_lq6->print();
+
 
     return 0;
 }

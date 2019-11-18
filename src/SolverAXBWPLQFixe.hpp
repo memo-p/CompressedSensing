@@ -41,17 +41,18 @@ public:
         a(a_),
         norms(new double[cfg.solve_iter_max]{0}),
         normsX(new double[cfg.solve_iter_max]{0})
-        {}
+        {
+            total_iter = 0;
+        }
     
     virtual void solve(){
         converged = false;
         solve_iter = 0;
-        total_iter = 0;
         r = b-(A*x);
         cur_norm = norm(r);
         while( ! converged){
             prev_norm = cur_norm;
-            w = 1. / pow(abs(x + cfg.epsilon),1-q);    // Update the weight
+            w = 1. / pow(abs(x + cfg.epsilonQ),1-q);    // Update the weight
             slvrwp.reset(x, w, a);                  // Solve for the current weight
             slvrwp.solve();
 
