@@ -31,6 +31,9 @@
 using namespace std;
 using namespace arma;
 
+namespace proj {
+
+
 void project(vec& y, vec& w,  vec& x, const double a){
     vec yabs = abs(y);
     vec signY = sign(y);
@@ -70,3 +73,5 @@ void test_projection(){
         printf("split failed \n");
     }
 }
+
+}  // namespace proj

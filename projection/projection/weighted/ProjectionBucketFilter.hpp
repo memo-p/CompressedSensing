@@ -26,7 +26,8 @@
 using namespace arma;
 using namespace std;
 
-// /* Algorithm w-bucket^f in the paper */
+namespace proj {
+
 void project_bucket_filter(double* y, double* w,  double* x,
 const unsigned int length, const double a){   
 
@@ -197,3 +198,5 @@ const unsigned int length, const double a){
         x[i]=(y[i] > w[i]*tau)? y[i]-w[i]*tau : 0.0; 
     free(ptrToFree);
 }
+
+}  // namespace proj

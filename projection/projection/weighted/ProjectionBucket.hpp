@@ -26,7 +26,8 @@
 using namespace arma;
 using namespace std;
 
-// /* Algorithm w-bucket in the paper */
+namespace proj {
+
 void project_bucket(double* y, double* w,  double* x,
 const unsigned int length, const double a)
 {   
@@ -168,3 +169,5 @@ const unsigned int length, const double a)
     free(ptrwr1);
     free(ptrwr2);
 }
+
+}  // namespace proj
