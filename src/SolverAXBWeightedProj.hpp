@@ -42,6 +42,11 @@ public:
         norms(new double[cfg.solve_iter_max]{0}),
         step_sizes(new double[cfg.solve_iter_max]{0})
         {}
+    
+    ~SolverAXBWeightedProj(){
+        delete norms;
+        delete step_sizes;
+    }
 
     virtual void solve(){
         converged = false;

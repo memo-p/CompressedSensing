@@ -42,8 +42,15 @@ public:
         recNorms(new double[nbQ_]{0}),
         normsXL0(new double[nbQ_]{0}),
         normsXL1(new double[nbQ_]{0}),
-        nbIters(new double[nbQ_]{0})
+        nbIters(new int[nbQ_]{0})
         {}
+    
+    ~SolverAXBWPLQ(){
+        delete recNorms;
+        delete normsXL0;
+        delete normsXL1;
+        delete nbIters;
+    }
     
     virtual void solve(){
         q = reverse(linspace(0., 1, nbQ));
@@ -64,7 +71,7 @@ public:
     double * recNorms;
     double * normsXL0;
     double * normsXL1;
-    double * nbIters;
+    int * nbIters;
     vec q;
     SolverAXBWPLQFixe slvrwpq;
 };
