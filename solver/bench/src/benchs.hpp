@@ -16,7 +16,6 @@
  */
 #pragma once
 
-#include "benchResults.hpp"
 #include "lq.hpp"
 
 std::vector<BenchResults> bench_LQ_fct_nbQ(arma::mat A, arma::vec b,

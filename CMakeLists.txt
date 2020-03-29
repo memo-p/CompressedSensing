@@ -17,6 +17,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
-add_subdirectory(projection)
+add_subdirectory(3rdparty/weighted_projection)
 add_subdirectory(solver)
 
