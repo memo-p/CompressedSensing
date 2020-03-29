@@ -26,10 +26,8 @@
 using namespace arma;
 using namespace std;
 
+namespace proj {
 
-// TODO:transform to a class
-
-/* Algorithm 1 in the paper, using sorting */
 void project_sort(const double* y, double* w,  double* x,
 const unsigned int length, const double a)
 {
@@ -62,3 +60,5 @@ const unsigned int length, const double a)
 	free(z);  
 	free(z_perm);  
 }
+
+}  // namespace proj

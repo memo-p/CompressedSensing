@@ -28,19 +28,8 @@ using namespace std;
 #define KahanSumDel(s,v,c,t,y) y = v + c; t = s - y; c = (t - s) + y; s = t;
 
 
-// void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
-// {
+namespace proj {
 
-// 	const mwSize *dims;
-// 	double *y = mxGetPr(prhs[0]);
-// 	double *w = mxGetPr(prhs[1]);
-// 	double *x = mxGetPr(prhs[2]);
-// 	dims = mxGetDimensions(prhs[0]);
-// 	int length = (int)dims[1]; 
-// 	double a = mxGetScalar(prhs[3]);
-
-
-// /* Algorithm w-split in the paper */
 void project_split(double* y, double* w,  double* x,
 const unsigned int length, const double a)
 {	
@@ -136,3 +125,6 @@ const unsigned int length, const double a)
 	free(aux0); 
 	free(waux0);
 } 
+
+}  // namespace proj
+

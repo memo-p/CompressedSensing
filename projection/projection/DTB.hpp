@@ -17,7 +17,27 @@
 
 #pragma once
 
+namespace proj {
+
+#ifndef USE_32_BITS_
+typedef double datatype;
+
 union DtB {
 double val;
 unsigned char byte[sizeof(double)];
 } ;
+#define DATASIZE 8
+
+#else
+typedef float datatype;
+
+union DtB {
+float val;
+unsigned char byte[sizeof(float)];
+} ;
+
+#define DATASIZE 4
+
+#endif
+
+}  // namespace proj
