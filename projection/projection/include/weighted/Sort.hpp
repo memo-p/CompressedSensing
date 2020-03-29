@@ -13,6 +13,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * From the code of Laurent Condat: https://lcondat.github.io
+ * 
 */
 
 #pragma once
@@ -20,9 +23,6 @@
 #include <iostream>
 #include <cstdio>
 #include <armadillo>
-
-using namespace arma;
-using namespace std;
 
 static void quicksort(double *z, int *z_perm, const int lo, const int hi) {
 	int i=lo, j=hi, temp_id;

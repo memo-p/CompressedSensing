@@ -13,51 +13,39 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
+
 #pragma once
- 
-#include <iostream>
-#include <cstdio>
-#include <cmath>
-#include <algorithm>
-#include <cstring>
-#include <vector>
-#include <armadillo>
 
-using namespace std;
-using namespace arma;
+namespace proj {
 
+#ifndef USE_32_BITS_
 
-class SolverConfiguration
-{
-public:
-    int solve_iter_max;
-    int solve_timeout;
-    int ls_iter_max;
-    double step_decrease_factor;
-    double min_loss_change;
-    double min_reweight_change;
-    double epsilon;
-    double epsilonQ;
+typedef double datatype;
+#define DATASIZE 8
+
+#else
+
+typedef float datatype;
+#define DATASIZE 4
+
+#endif
+
+union DtB {
+  datatype val;
+  unsigned char byte[sizeof(datatype)];
 };
+typedef union DtB Dtb;
 
+#define KahanSum(s, v, c, t, y) \
+  y = v - c;                    \
+  t = s + y;                    \
+  c = (t - s) - y;              \
+  s = t;
+#define KahanSumDel(s, v, c, t, y) \
+  y = v + c;                       \
+  t = s - y;                       \
+  c = (t - s) + y;                 \
+  s = t;
 
-
-
-class SolverAXB
-{
-public:
-    SolverAXB(mat A_, vec b_, vec x0, SolverConfiguration& cfg_):
-        A(A_),
-        b(b_),
-        x(x0),
-        cfg(cfg_)
-        {}
-
-    virtual void solve() = 0;
-
-    mat A;
-    vec b;
-    vec x;
-    SolverConfiguration& cfg;
-};
+}  // namespace proj

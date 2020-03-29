@@ -25,8 +25,8 @@
 #include "DTB.hpp"
 
 namespace proj {
-  
-inline void ProjC(const datatype* y, datatype* x, const unsigned int length,
+
+inline void ProjC(const datatype* y, datatype* x, const int length,
                   const double a) {
   datatype* aux = new datatype[length];
   datatype* aux0 = aux;

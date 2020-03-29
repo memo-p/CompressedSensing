@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <iostream>
 #include <vector>
-#include "basic/projection.hpp"
+#include "weighted/projection.hpp"
 #include "catch.hpp"
 
 TEST_CASE("test projection 1") {
@@ -18,17 +18,23 @@ TEST_CASE("test projection 1") {
   for (size_t i = 0; i < rep; i++) {
     arma::vec y = arma::abs(arma::randn<arma::vec>(l));
     arma::vec x = arma::zeros<arma::vec>(l);
+    arma::vec w = arma::abs(arma::randn<arma::vec>(l));
 
-    proj::ProjC(y.memptr(), x.memptr(), l, a);
-    r = arma::sum(x);
+    proj::ProjWSort(y.memptr(), w.memptr(), x.memptr(), l, a);
+    r = arma::dot(w,x);
     REQUIRE(abs(r - a) < epsilon);
 
-    proj::ProjB(y.memptr(), x.memptr(), l, a);
-    r = arma::sum(x);
+    proj::ProjWSplit(y.memptr(), w.memptr(), x.memptr(), l, a);
+    r = arma::dot(w,x);
     REQUIRE(abs(r - a) < epsilon);
 
-    proj::ProjBF(y.memptr(), x.memptr(), l, a);
-    r = arma::sum(x);
+    proj::ProjWB(y.memptr(), w.memptr(), x.memptr(), l, a);
+    r = arma::dot(w,x);
     REQUIRE(abs(r - a) < epsilon);
+
+    proj::ProjWBF(y.memptr(), w.memptr(), x.memptr(), l, a);
+    r = arma::dot(w,x);
+    REQUIRE(abs(r - a) < epsilon);
+
   }
 }

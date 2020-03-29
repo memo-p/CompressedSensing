@@ -18,5 +18,5 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
 add_subdirectory(projection)
-# add_subdirectory(solver)
+add_subdirectory(solver)
 

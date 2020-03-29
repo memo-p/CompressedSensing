@@ -22,26 +22,22 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
-#include "Bench.hpp"
+#include "analyze.hpp"
 
-using namespace std;
-using namespace arma;
-
-int main(int argc, char **argv) {
-  test_projection();
-  arma_rng::set_seed(5);     // set the seed
-  int k = 30;                // number of non-zeros component of x
-  int n = 100;               // number of rows
-  int m = 256;               // number of columns (should be greater than n)
-  double a = k;              // radius
-  int nbQ = 4;               // Number of q values for lq
-  mat A = randn<mat>(n, m);  // Matrix A
-  vec x0 = zeros<vec>(m);    // true x (with sparsity k) and gaussian values
+int main(int, char **) {
+  arma::arma_rng::set_seed(5);  // set the seed
+  int k = 30;                   // number of non-zeros component of x
+  int n = 100;                  // number of rows
+  int m = 256;                  // number of columns (should be greater than n)
+  double a = k;                 // radius
+  arma::mat A = arma::randn<arma::mat>(n, m);  // Matrix A
+  arma::vec x0 = arma::zeros<arma::vec>(
+      m);  // true x (with sparsity k) and gaussian values
   for (int i = 0; i < k; ++i) {
     int id = rand() % m;
-    x0[id] = randn(1)[0];
+    x0[id] = arma::randn(1)[0];
   }
-  vec b = A * x0;
+  arma::vec b = A * x0;
 
   SolverConfiguration cfg;
   cfg.ls_iter_max = 30;
@@ -53,15 +49,15 @@ int main(int argc, char **argv) {
   cfg.step_decrease_factor = 2.;
   cfg.min_reweight_change = 1e-8;
 
-  vec x = randn<vec>(m);
+  arma::vec x = arma::randn<arma::vec>(m);
 
   analyse_different_algorithms(A, b, x, cfg, a);
 
-//   analyse_LQ_fct_nbQ(A, b, x, cfg, a);
+  // analyse_LQ_fct_nbQ(A, b, x, cfg, a);
 
   // analyse_LQ_fct_nbQ_by_iter(A, b, x, cfg, a);
 
-//   analyse_LQ_fct_radius(A, b, x, cfg, k * .5, k * 2, 20);
+  // analyse_LQ_fct_radius(A, b, x, cfg, k * .5, k * 2, 20);
 
   return 0;
 }

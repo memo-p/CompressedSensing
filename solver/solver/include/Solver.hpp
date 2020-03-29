@@ -13,31 +13,32 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; If not, see <http://www.gnu.org/licenses/>.
-*/
-
+ */
 #pragma once
 
-namespace proj {
+#include <armadillo>
 
-#ifndef USE_32_BITS_
-typedef double datatype;
+class SolverConfiguration {
+ public:
+  int solve_iter_max;
+  int solve_timeout;
+  int ls_iter_max;
+  double step_decrease_factor;
+  double min_loss_change;
+  double min_reweight_change;
+  double epsilon;
+  double epsilonQ;
+};
 
-union DtB {
-double val;
-unsigned char byte[sizeof(double)];
-} ;
-#define DATASIZE 8
+class SolverAXB {
+ public:
+  SolverAXB(arma::mat A_, arma::vec b_, arma::vec x0, SolverConfiguration& cfg_)
+      : A(A_), b(b_), x(x0), cfg(cfg_) {}
 
-#else
-typedef float datatype;
+  virtual void solve() = 0;
 
-union DtB {
-float val;
-unsigned char byte[sizeof(float)];
-} ;
-
-#define DATASIZE 4
-
-#endif
-
-}  // namespace proj
+  arma::mat A;
+  arma::vec b;
+  arma::vec x;
+  SolverConfiguration& cfg;
+};
