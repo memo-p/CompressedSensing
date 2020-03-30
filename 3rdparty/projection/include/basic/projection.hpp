@@ -35,4 +35,4 @@ inline void project(arma::vec& y, arma::vec& x, const double a) {
   x %= signY;
 }
 
-} // namespace proj
+}  // namespace proj

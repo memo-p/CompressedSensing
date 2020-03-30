@@ -23,7 +23,10 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
+
 #include "SolverAXBWeightedProj.hpp"
+
+namespace solverAxb {
 
 class SolverAXBWPLQFixe : public SolverAXB {
  public:
@@ -83,3 +86,5 @@ class SolverAXBWPLQFixe : public SolverAXB {
     total_iter += solve_iter;
   }
 };
+
+}  // namespace solverAxb

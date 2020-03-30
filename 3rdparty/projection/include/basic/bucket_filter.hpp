@@ -7,8 +7,9 @@ namespace proj {
 
 void ProjBF(datatype* y, datatype* x, const int length, const double a) {
   union DtB* r1 = new DtB[length];
-  union DtB* r1ptr = r1;
-  union DtB* r2 = (union DtB*)x;
+  union DtB* r1_ptr = r1;
+  union DtB* r2 = ((y == x) ? (new DtB[length]) : (union DtB*)x);
+  union DtB* r2_ptr = r2;
   int plength;
   int illength;
   double p;
@@ -35,10 +36,16 @@ void ProjBF(datatype* y, datatype* x, const int length, const double a) {
     maxS[i] = DBL_MIN;
   }
 
-  p = -a;
   start = 0;
-  plength = 0;
-  i = 0;
+  const double i_v = r1[start].val = *(++y_ptr);
+  const size_t i_b = r1[start].byte[depth];
+  ++tmp[i_b];
+  s[i_b] += i_v;
+  minS[i_b] = std::min(minS[i_b], i_v);
+  maxS[i_b] = std::max(maxS[i_b], i_v);
+  p = i_v - a;
+  plength = 1;
+  i = 1;
   while (++y_ptr != y_ptr_over) {
     if (*y_ptr > p) {
       if ((p += ((r1[i].val = *y_ptr) - p) / (++plength)) <= *y_ptr - a) {
@@ -125,8 +132,9 @@ void ProjBF(datatype* y, datatype* x, const int length, const double a) {
     depth++;
   }
   tau /= count;
-  for (i = 0; i < length; i++) x[i] = (y[i] > tau ? y[i] - tau : 0.0);
-  delete[] r1ptr;
+  for (i = 0; i < length; i++) x[i] = (y[i] > tau) ? y[i] - tau : 0.0;
+  delete[] r1_ptr;
+  if (y == x) delete[] r2_ptr;
 }
 
 }  // namespace proj

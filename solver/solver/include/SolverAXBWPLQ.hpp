@@ -25,6 +25,8 @@
 #include <vector>
 #include "SolverAXBWPLQFixe.hpp"
 
+namespace solverAxb {
+
 class SolverAXBWPLQ : public SolverAXB {
  public:
   SolverAXBWPLQFixe slvrwpq;
@@ -69,3 +71,6 @@ class SolverAXBWPLQ : public SolverAXB {
     x = slvrwpq.x;
   }
 };
+
+}  // namespace solverAxb
+

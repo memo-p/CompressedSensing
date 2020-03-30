@@ -18,6 +18,8 @@
 
 #include <armadillo>
 
+namespace solverAxb {
+
 class SolverConfiguration {
  public:
   int solve_iter_max;
@@ -42,3 +44,5 @@ class SolverAXB {
   arma::vec x;
   SolverConfiguration& cfg;
 };
+
+}  // namespace solverAxb

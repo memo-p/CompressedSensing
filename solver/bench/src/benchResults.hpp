@@ -16,7 +16,9 @@
  */
 #pragma once
 
-#include "SolverAXBWPLQ.hpp"
+#include "solversAxb.hpp"
+
+namespace solverAxb {
 
 struct BenchResults {
   double L0;
@@ -66,3 +68,5 @@ struct BenchResults {
     printf("\n");
   }
 };
+
+}  // namespace solverAxb

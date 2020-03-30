@@ -18,6 +18,8 @@
 
 #include "lq.hpp"
 
+namespace solverAxb {
+
 std::vector<BenchResults> bench_LQ_fct_nbQ(arma::mat A, arma::vec b,
                                            arma::vec x, SolverConfiguration cfg,
                                            double a, int nbQ_min = 2,
@@ -56,3 +58,5 @@ std::vector<BenchResults> bench_LQ_fct_radius(arma::mat A, arma::vec b,
   }
   return res;
 }
+
+}  // namespace solverAxb

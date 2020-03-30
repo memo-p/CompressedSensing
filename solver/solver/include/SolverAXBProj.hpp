@@ -18,13 +18,13 @@
 
 #include <armadillo>
 #include <vector>
+
 #include "Solver.hpp"
 #include "projection.hpp"
 
-// using namespace arma;
 namespace solverAxb {
 
-class SolverAXBWeightedProj : public SolverAXB {
+class SolverAXBProj : public SolverAXB {
  public:
   bool converged;
   int ls_iter;
@@ -33,17 +33,15 @@ class SolverAXBWeightedProj : public SolverAXB {
   double cur_norm;
   double prev_norm;
   double step_size;
-  arma::vec w;
   arma::vec r;
   arma::vec xp;
   double* norms;
   double* step_sizes;
 
-  SolverAXBWeightedProj(arma::mat A_, arma::vec b_, arma::vec x0,
-                        SolverConfiguration& cfg_, arma::vec w_, double a_)
+  SolverAXBProj(arma::mat A_, arma::vec b_, arma::vec x0,
+                SolverConfiguration& cfg_, double a_)
       : SolverAXB(A_, b_, x0, cfg_),
         a(a_),
-        w(w_),
         xp(x0.size()),
         norms(new double[cfg.solve_iter_max]{0}),
         step_sizes(new double[cfg.solve_iter_max]{0}) {}
@@ -51,7 +49,7 @@ class SolverAXBWeightedProj : public SolverAXB {
   virtual void solve() {
     converged = false;
     // put initial point into the ball, if not already there
-    proj::project(x, w, x, a);
+    proj::project(x, x, a);
     r = b - (A * x);
     cur_norm = arma::norm(r);
     solve_iter = 0;
@@ -61,15 +59,15 @@ class SolverAXBWeightedProj : public SolverAXB {
       arma::mat grad = -A.t() * (b - (A * x)) /
                        arma::sum(arma::square(A)).t();  // Gradient value
       xp = x - step_size * grad;                        // Gradient step
-      proj::project(xp, w, xp, a);                      // Projection
+      proj::project(xp, xp, a);                         // Projection
       r = b - A * xp;
       cur_norm = arma::norm(r);
       ls_iter = 0;  // Current reconstruction value
       while (cur_norm > prev_norm &&
              ls_iter < cfg.ls_iter_max) {  // Line search (for the step size)
         step_size /= cfg.step_decrease_factor;
-        xp = x - step_size * grad;    // Gradient step
-        proj::project(xp, w, xp, a);  // Projection
+        xp = x - step_size * grad;  // Gradient step
+        proj::project(xp, xp, a);   // Projection
         r = b - A * xp;
         cur_norm = arma::norm(r);
         ++ls_iter;
@@ -85,12 +83,11 @@ class SolverAXBWeightedProj : public SolverAXB {
       }
     }
   }
-  void reset(arma::vec x_, arma::vec w_, double a_) {
+
+  void reset(arma::vec x_, double a_) {
     x = x_;
-    w = w_;
     a = a_;
   }
 };
 
 }  // namespace solverAxb
-

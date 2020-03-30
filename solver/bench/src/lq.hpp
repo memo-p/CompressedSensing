@@ -19,6 +19,8 @@
 
 #include "benchResults.hpp"
 
+namespace solverAxb {
+
 BenchResults bench_LQ(arma::mat A, arma::vec b, arma::vec x,
                       SolverConfiguration cfg, double a, int nbQ = 4) {
   auto start = std::chrono::system_clock::now();
@@ -42,3 +44,5 @@ BenchResults bench_LQ(arma::mat A, arma::vec b, arma::vec x,
   res.nbQ = nbQ;
   return res;
 }
+
+}  // namespace solverAxb

@@ -18,11 +18,12 @@
 
 #include "benchResults.hpp"
 
+namespace solverAxb {
+
 BenchResults bench_Lasso(arma::mat A, arma::vec b, arma::vec x,
                          SolverConfiguration& cfg, double a) {
-  arma::vec w = arma::ones<arma::vec>(x.n_elem);
   auto start = std::chrono::system_clock::now();
-  SolverAXBWeightedProj slvrw(A, b, x, cfg, w, a);
+  SolverAXBProj slvrw(A, b, x, cfg, a);
   slvrw.solve();
   auto end = std::chrono::system_clock::now();
 
@@ -39,3 +40,5 @@ BenchResults bench_Lasso(arma::mat A, arma::vec b, arma::vec x,
   res.nbQ = 0;
   return res;
 }
+
+}  // namespace solverAxb

@@ -18,14 +18,16 @@
 
 #include "benchResults.hpp"
 
+namespace solverAxb {
+
 BenchResults bench_candes(arma::mat A, arma::vec b, arma::vec x,
                           SolverConfiguration cfg, double a) {
   auto start = std::chrono::system_clock::now();
   cfg.epsilonQ = 0.1;
+  SolverAXBProj slvr(A, b, x, cfg, a);
+  slvr.solve();  // One iteration of Lasso             (init with l1 sol)
   arma::vec w = arma::ones<arma::vec>(x.n_elem);
-  SolverAXBWeightedProj slvrw(A, b, x, cfg, w, a);
-  slvrw.solve();  // One iteration of Lasso             (init with l1 sol)
-  SolverAXBWPLQFixe slvrwqf(A, b, slvrw.x, cfg, w, a, 0);
+  SolverAXBWPLQFixe slvrwqf(A, b, slvr.x, cfg, w, a, 0);
   slvrwqf.solve();  // One iteration with a epsilon = 1e-1 (fast search stage)
   cfg.epsilonQ = 0.01;
   slvrwqf.solve();  // One iteration with a epsilon = 1e-2 (final optimization
@@ -37,7 +39,7 @@ BenchResults bench_candes(arma::mat A, arma::vec b, arma::vec x,
   res.L1 = norm(slvrwqf.x, 1);
   res.lossrec = slvrwqf.norms[slvrwqf.solve_iter - 1];
   res.elapsed_seconds = end - start;
-  res.nbIteration = slvrwqf.total_iter + slvrw.solve_iter;
+  res.nbIteration = slvrwqf.total_iter + slvr.solve_iter;
   res.cfg = cfg;
   res.n = A.n_cols;
   res.m = A.n_rows;
@@ -45,3 +47,5 @@ BenchResults bench_candes(arma::mat A, arma::vec b, arma::vec x,
   res.nbQ = 1;
   return res;
 }
+
+}  // namespace solverAxb

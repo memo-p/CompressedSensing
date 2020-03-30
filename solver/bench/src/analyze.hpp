@@ -20,6 +20,8 @@
 #include "candes.hpp"
 #include "lasso.hpp"
 
+namespace solverAxb {
+
 void analyse_LQ_fct_radius(arma::mat A, arma::vec b, arma::vec x,
                            SolverConfiguration cfg, double a_min, double a_max,
                            uint64_t nb_a, uint64_t q = 4) {
@@ -108,3 +110,5 @@ void analyse_LQ_fct_nbQ_by_iter(arma::mat A, arma::vec b, arma::vec x,
   }
   printf("]\n");
 }
+
+}  // namespace solverAxb

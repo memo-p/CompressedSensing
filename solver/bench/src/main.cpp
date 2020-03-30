@@ -22,11 +22,12 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
+
 #include "analyze.hpp"
 
 int main(int, char **) {
   arma::arma_rng::set_seed(5);  // set the seed
-  int k = 30;                   // number of non-zeros component of x
+  int k = 15;                   // number of non-zeros component of x
   int n = 100;                  // number of rows
   int m = 256;                  // number of columns (should be greater than n)
   double a = k;                 // radius
@@ -39,7 +40,7 @@ int main(int, char **) {
   }
   arma::vec b = A * x0;
 
-  SolverConfiguration cfg;
+  solverAxb::SolverConfiguration cfg;
   cfg.ls_iter_max = 30;
   cfg.epsilon = 1e-8;
   cfg.epsilonQ = 1e-7;
@@ -51,13 +52,13 @@ int main(int, char **) {
 
   arma::vec x = arma::randn<arma::vec>(m);
 
-  analyse_different_algorithms(A, b, x, cfg, a);
+  solverAxb::analyse_different_algorithms(A, b, x, cfg, a);
 
-  // analyse_LQ_fct_nbQ(A, b, x, cfg, a);
+  // solverAxb::analyse_LQ_fct_nbQ(A, b, x, cfg, a);
 
-  // analyse_LQ_fct_nbQ_by_iter(A, b, x, cfg, a);
+  // solverAxb::analyse_LQ_fct_nbQ_by_iter(A, b, x, cfg, a);
 
-  // analyse_LQ_fct_radius(A, b, x, cfg, k * .5, k * 2, 20);
+  // solverAxb::analyse_LQ_fct_radius(A, b, x, cfg, k * .5, k * 2, 20);
 
   return 0;
 }
