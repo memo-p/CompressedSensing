@@ -18,13 +18,14 @@
 
 #include <armadillo>
 #include <vector>
+
 #include "Solver.hpp"
 #include "projection.hpp"
 
 // using namespace arma;
 namespace solverAxb {
 
-class SolverAXBWeightedProj : public SolverAXB {
+class SolverAXBWeightedProj : public SolverAXBI {
  public:
   bool converged;
   int ls_iter;
@@ -41,7 +42,7 @@ class SolverAXBWeightedProj : public SolverAXB {
 
   SolverAXBWeightedProj(arma::mat A_, arma::vec b_, arma::vec x0,
                         SolverConfiguration& cfg_, arma::vec w_, double a_)
-      : SolverAXB(A_, b_, x0, cfg_),
+      : SolverAXBI(A_, b_, x0, cfg_),
         a(a_),
         w(w_),
         xp(x0.size()),
@@ -93,4 +94,3 @@ class SolverAXBWeightedProj : public SolverAXB {
 };
 
 }  // namespace solverAxb
-

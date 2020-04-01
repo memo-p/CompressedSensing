@@ -32,9 +32,9 @@ class SolverConfiguration {
   double epsilonQ;
 };
 
-class SolverAXB {
+class SolverAXBI {
  public:
-  SolverAXB(arma::mat A_, arma::vec b_, arma::vec x0, SolverConfiguration& cfg_)
+  SolverAXBI(arma::mat A_, arma::vec b_, arma::vec x0, SolverConfiguration& cfg_)
       : A(A_), b(b_), x(x0), cfg(cfg_) {}
 
   virtual void solve() = 0;

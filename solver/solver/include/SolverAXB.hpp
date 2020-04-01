@@ -24,7 +24,7 @@
 
 namespace solverAxb {
 
-class SolverAXBProj : public SolverAXBI {
+class SolverAXB : public SolverAXBI {
  public:
   bool converged;
   int ls_iter;
@@ -38,8 +38,8 @@ class SolverAXBProj : public SolverAXBI {
   double* norms;
   double* step_sizes;
 
-  SolverAXBProj(arma::mat A_, arma::vec b_, arma::vec x0,
-                SolverConfiguration& cfg_, double a_)
+  SolverAXB(arma::mat A_, arma::vec b_, arma::vec x0, SolverConfiguration& cfg_,
+            double a_)
       : SolverAXBI(A_, b_, x0, cfg_),
         a(a_),
         xp(x0.size()),
@@ -48,8 +48,6 @@ class SolverAXBProj : public SolverAXBI {
 
   virtual void solve() {
     converged = false;
-    // put initial point into the ball, if not already there
-    proj::project(x, x, a);
     r = b - (A * x);
     cur_norm = arma::norm(r);
     solve_iter = 0;
@@ -59,7 +57,6 @@ class SolverAXBProj : public SolverAXBI {
       arma::mat grad = -A.t() * (b - (A * x)) /
                        arma::sum(arma::square(A)).t();  // Gradient value
       xp = x - step_size * grad;                        // Gradient step
-      proj::project(xp, xp, a);                         // Projection
       r = b - A * xp;
       cur_norm = arma::norm(r);
       ls_iter = 0;  // Current reconstruction value
@@ -67,7 +64,6 @@ class SolverAXBProj : public SolverAXBI {
              ls_iter < cfg.ls_iter_max) {  // Line search (for the step size)
         step_size /= cfg.step_decrease_factor;
         xp = x - step_size * grad;  // Gradient step
-        proj::project(xp, xp, a);   // Projection
         r = b - A * xp;
         cur_norm = arma::norm(r);
         ++ls_iter;

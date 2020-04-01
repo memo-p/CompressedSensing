@@ -28,7 +28,7 @@
 
 namespace solverAxb {
 
-class SolverAXBWPLQFixe : public SolverAXB {
+class SolverAXBWPLQFixe : public SolverAXBI {
  public:
   SolverAXBWeightedProj slvrwp;
   arma::vec w;
@@ -46,7 +46,7 @@ class SolverAXBWPLQFixe : public SolverAXB {
   SolverAXBWPLQFixe(arma::mat A_, arma::vec b_, arma::vec x0,
                     SolverConfiguration& cfg_, arma::vec w_, double a_,
                     double q_)
-      : SolverAXB(A_, b_, x0, cfg_),
+      : SolverAXBI(A_, b_, x0, cfg_),
         slvrwp(A_, b_, x0, cfg_, w_, a_),
         w(w_),
         q(q_),
